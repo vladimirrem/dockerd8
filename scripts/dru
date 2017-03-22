@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+drupal_base=/var/www/html
+
+# Set the Default (or custom) drush command.
+if [[ "$drush" == "" ]]; then
+  if which drush > /dev/null && [[ $(echo "$(drush --version --pipe) >= 8.0" | bc) == 1 ]]; then
+    drush="drush -r $drupal_base $@"
+  else
+    drush="./vendor/bin/drush -r $drupal_base $@"
+  fi
+fi
+
+docker-compose exec web bash -ci "$drush"

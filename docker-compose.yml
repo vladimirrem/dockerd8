@@ -1,0 +1,50 @@
+version: '2'
+services:
+
+  data:
+    container_name: data_db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_DATABASE: drupal
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./config/mysql/config:/etc/mysql/conf.d
+    ports:
+      - "3307:3306"
+#    expose:
+#      - "3306"
+
+  web:
+    container_name: web_d8
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - data
+    links:
+      - data
+    volumes:
+      - .:/var/www/
+      - ./config/apache:/etc/apache2/sites-enabled
+    ports:
+      - "81:80"
+    expose:
+      - "80"
+      - "9000"
+
+
+
+
+
+
+
+
+
+  # d8mail:
+  #   container_name: d8_dev_mailhog
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - "8006:8025"

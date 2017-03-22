@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+composer="composer $@"
+
+docker-compose exec web bash -ci "$composer"
